@@ -13,7 +13,7 @@ class StoreDriverRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,21 @@ class StoreDriverRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:100'],
+            'nickname' => ['nullable', 'string', 'max:100'],
+            'email' => ['required', 'email', 'unique:drivers,email'],
+            'phone' => ['nullable', 'string'],
+            'age' => ['required', 'integer', 'between:18,70'],
+            'isFree' => ['sometimes', 'boolean'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if (key_exists('isFree', $this->all())) {
+            $this->merge([
+                'is_free' => $this->isFree
+            ]);
+        }
     }
 }

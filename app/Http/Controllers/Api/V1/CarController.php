@@ -26,18 +26,22 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\V1\StoreCarRequest  $request
+     * @param \App\Http\Requests\V1\StoreCarRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCarRequest $request)
     {
-        //
+        $car = Car::create($request->input());
+        return response([
+            'car' => new CarResource($car),
+            'message' => 'New Car created successfully',
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Car  $car
+     * @param \App\Models\Car $car
      * @return \Illuminate\Http\Response
      */
     public function show(Car $car)
@@ -51,23 +55,31 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\V1\UpdateCarRequest  $request
-     * @param  \App\Models\Car  $car
+     * @param \App\Http\Requests\V1\UpdateCarRequest $request
+     * @param \App\Models\Car $car
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateCarRequest $request, Car $car)
     {
-        //
+        $car->update($request->input());
+
+        return response([
+            'car' => new CarResource($car),
+            'message' => 'Car successfully updated',
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Car  $car
+     * @param \App\Models\Car $car
      * @return \Illuminate\Http\Response
      */
     public function destroy(Car $car)
     {
-        //
+        $car->delete();
+        return response([
+            'message' => 'Car successfully deleted',
+        ]);
     }
 }

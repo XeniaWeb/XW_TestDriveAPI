@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Models\Car;
+use App\Models\Driver;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCarDrivingRequest extends FormRequest
 {
@@ -13,7 +16,7 @@ class UpdateCarDrivingRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +26,38 @@ class UpdateCarDrivingRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $drivers = Driver::query()->get()->pluck('id');
+        $cars = Car::query()->get()->pluck('id');
+        $method = $this->method();
+        if ($method == 'PUT') {
+            return [
+                'driver_id' => ['required', 'numeric', Rule::in($drivers)],
+                'car_id' => ['required', 'numeric', Rule::in($cars)],
+                'startDrive' => ['required', 'datetime'],
+                'finishDrive' => ['nullable', 'datetime'],
+            ];
+        } else {
+            return [
+                'driver_id' => ['sometimes', 'required', 'numeric', Rule::in($drivers)],
+                'car_id' => ['sometimes', 'required', 'numeric', Rule::in($cars)],
+                'startDrive' => ['sometimes', 'required', 'datetime'],
+                'finishDrive' => ['sometimes', 'nullable', 'datetime'],
+            ];
+        }
+    }
+
+    protected function prepareForValidation()
+    {
+        if (key_exists('startDrive', $this->all())) {
+            $this->merge([
+                'start_drive' => $this->startDrive,
+            ]);
+        }
+
+        if (key_exists('finishDrive', $this->all())) {
+            $this->merge([
+                'finish_drive' => $this->finishDrive
+            ]);
+        }
     }
 }
