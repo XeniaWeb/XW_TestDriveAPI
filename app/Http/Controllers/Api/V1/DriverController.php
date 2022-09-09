@@ -17,8 +17,12 @@ class DriverController extends Controller
      */
     public function index()
     {
+        $drivers = Driver::query()
+            ->get()
+            ->sortDesc();
+
         return response([
-            'drivers' => DriverResource::collection(Driver::all()->sortDesc()),
+            'drivers' => DriverResource::collection($drivers),
             'message' => 'Retrieved successfully',
         ]);
     }

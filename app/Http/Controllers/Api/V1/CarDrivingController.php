@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\StoreCarDrivingRequest;
 use App\Http\Requests\V1\UpdateCarDrivingRequest;
+use App\Http\Resources\v1\CarDrivingResource;
 use App\Models\CarDriving;
 
 class CarDrivingController extends Controller
@@ -16,7 +17,14 @@ class CarDrivingController extends Controller
      */
     public function index()
     {
-        //
+        $carDrivings = CarDriving::query()
+            ->get()
+            ->sortDesc();
+
+        return response([
+            'carDrivings' => CarDrivingResource::collection($carDrivings),
+            'message' => 'That is all'
+        ]);
     }
 
     /**

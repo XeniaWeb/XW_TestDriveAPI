@@ -17,8 +17,12 @@ class CarController extends Controller
      */
     public function index()
     {
+        $cars = Car::query()
+            ->get()
+            ->sortDesc();
+
         return response([
-            'cars' => CarResource::collection(Car::all()->sortDesc()),
+            'cars' => CarResource::collection($cars),
             'message' => 'Retrieved successfully',
         ]);
     }

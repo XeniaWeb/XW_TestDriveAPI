@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Car extends Model
@@ -17,4 +18,9 @@ class Car extends Model
         'age_year',
         'is_free',
     ];
+
+    public function carDrivings():HasMany
+    {
+        return $this->hasMany(CarDriving::class);
+    }
 }

@@ -23,6 +23,7 @@ Route::group([
 ], function () {
     Route::apiResource('drivers', App\Http\Controllers\Api\V1\DriverController::class);
     Route::apiResource('cars', App\Http\Controllers\Api\V1\CarController::class);
+    Route::apiResource('car-drivings', App\Http\Controllers\Api\V1\CarDrivingController::class);
     Route::post('start-drive', [App\Http\Controllers\Api\V1\CarDrivingController::class, 'startDrive'])->name('drive.start');
     Route::post('finish-drive', [App\Http\Controllers\Api\V1\CarDrivingController::class, 'finishDrive'])->name('drive.finish');
 });
