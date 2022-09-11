@@ -30,19 +30,27 @@ class StoreCarDrivingRequest extends FormRequest
         $cars = Car::query()->get()->pluck('id');
         $method = $this->method();
         return [
-
-            'driver_id' => ['required', 'numeric', Rule::in($drivers)],
-            'car_id' => ['required', 'numeric', Rule::in($cars)],
-            'startDrive' => ['required', 'datetime'],
-            'finishDrive' => ['nullable', 'datetime'],
+            'driverId' => ['required', 'numeric', Rule::in($drivers)],
+            'carId' => ['required', 'numeric', Rule::in($cars)],
+            'startDrive' => ['sometimes', 'required', 'datetime'],
+            'finishDrive' => ['sometimes', 'nullable', 'datetime'],
         ];
     }
 
     protected function prepareForValidation()
     {
+        $this->merge([
+            'driver_id' => $this->driverId,
+            'car_id' => $this->carId,
+        ]);
+
         if (key_exists('startDrive', $this->all())) {
             $this->merge([
                 'start_drive' => $this->startDrive,
+            ]);
+        } else {
+            $this->merge([
+                'start_drive' => now(),
             ]);
         }
 

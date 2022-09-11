@@ -32,6 +32,7 @@ class CarDrivingResource extends JsonResource
         ];
 
         return [
+            'id' => $this->id,
             'driverId' => $this->driver_id,
             'carId' => $this->car_id,
             'startDrive' => $this->start_drive,
